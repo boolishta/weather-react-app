@@ -15,7 +15,7 @@ class WeatherDisplayContainer extends Component {
   }
   componentDidMount() {
     const name = this.props.name;
-    const URL = "http://api.openweathermap.org/data/2.5/weather?q=" +
+    const URL = "https://api.openweathermap.org/data/2.5/weather?q=" +
       name + "&units=metric&appid=b1b35bba8b434a28a0be2a3e1071ae5b";
     Axios.get(URL)
       .then(res => this.setState({ weatherData: res.data }))
@@ -34,7 +34,7 @@ class WeatherDisplayContainer extends Component {
       return <Spinner animation="grow" />
     }
     const weather = weatherData.weather[0];
-    const iconUrl = "http://openweathermap.org/img/w/" + weather.icon + ".png";
+    const iconUrl = "https://openweathermap.org/img/w/" + weather.icon + ".png";
     return <WeatherDisplay weather={weather} weatherData={weatherData} iconUrl={iconUrl}/>
   }
 }
