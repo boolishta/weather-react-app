@@ -1,16 +1,12 @@
 import React from 'react'
-import { Form, Button } from 'react-bootstrap'
+import { TextField, Button } from '@material-ui/core'
 
-const Search = ({handleSubmit, value, handleChange }) => {
+const Search = ({ handleSubmit, value, handleChange }) => {
   return (
-    <Form onSubmit={handleSubmit}>
-      <Form.Row>
-        <Form.Group  controlId="formGridCity" >
-          <Form.Control value={value} placeholder="Search..." onChange={handleChange} />
-        </Form.Group>
-      </Form.Row>
-      <Button variant="outline-success" type="submit"> Добавить</Button>
-    </Form>
+    <form onSubmit={handleSubmit}>
+      <TextField  value={value} placeholder="Search..." onChange={handleChange} required fullWidth margin="normal" />
+      <Button variant="contained" type="submit" color="primary"> Добавить</Button>
+    </form>
   )  
 }
 

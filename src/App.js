@@ -1,11 +1,12 @@
+import { Container, Grid } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import React, { Component } from 'react';
-import { Col, Container, Row } from "react-bootstrap";
-import './css/bootstrap.min.css';
 import './App.css';
 import Cities from './components/Cities';
 import Header from './components/Header';
 import Search from './components/Search';
 import WeatherDisplayContainer from './components/WeatherDisplayContainer';
+import './css/bootstrap.min.css';
 
 
 class App extends Component {
@@ -30,7 +31,7 @@ class App extends Component {
   }
   removeCity(name) {
     const { PLACES } = this.state;
-    let newPlaces = PLACES.filter( p => p.name !== name)
+    let newPlaces = PLACES.filter(p => p.name !== name)
     this.setState({ PLACES: newPlaces, activePlace: 0 })
   }
   handleChange(event) {
@@ -51,28 +52,41 @@ class App extends Component {
 
   render() {
     const { activePlace, PLACES, value } = this.state;
-    if ( !PLACES.length ) return (
-      <Container>
-        <Header />
-        <Row>
-          <Col md={4} sd={4}>
-            <Search value={value} handleSubmit={this.handleSubmit} handleChange={this.handleChange}/>
-          </Col>
-          <Col md={8} sd={8}><h1>Нет города для показа погоды</h1></Col>
-        </Row>
+    if (!PLACES.length) return (
+      <Container maxWidth='md' style={{marginTop: 20}}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}><Header /></Grid>
+          <Grid item xs={5}>
+            <Search value={value} handleSubmit={this.handleSubmit} handleChange={this.handleChange} />
+          </Grid>
+          <Grid item xs={7}>
+            <Alert severity="error">
+              <AlertTitle>Error</AlertTitle>
+              Выберите город
+            </Alert>
+          </Grid>  
+        </Grid>
       </Container>)
     return (
-      <Container>
-        <Header />
-        <Row>
-          <Col md={4} sd={4}>
-            <Search value={value} handleSubmit={this.handleSubmit} handleChange={this.handleChange}/>           
-            <Cities PLACES={PLACES} activePlace={activePlace} removeCity={this.removeCity} updateActivePlace={this.updateActivePlace}/>
-          </Col>
-          <Col md={8} sd={8}>
-            <WeatherDisplayContainer key={activePlace} name={PLACES[activePlace].name} />
-          </Col>
-        </Row>
+      <Container maxWidth='md' style={{marginTop: 20}}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Header />
+          </Grid>
+          <Grid item xs={5}>
+            <Search value={value} handleSubmit={this.handleSubmit}
+              handleChange={this.handleChange} />
+              <br/>
+            <Cities PLACES={PLACES} activePlace={activePlace}
+                    removeCity={this.removeCity}
+                    updateActivePlace={this.updateActivePlace} 
+                    />
+          </Grid>
+          <Grid item xs={7}>
+              <WeatherDisplayContainer key={activePlace} name={PLACES[activePlace].name} />
+          </Grid>
+          
+        </Grid>
       </Container>
     );
   }

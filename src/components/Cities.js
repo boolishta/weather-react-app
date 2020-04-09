@@ -1,20 +1,28 @@
-import React from 'react'
-import { Nav, NavItem, NavLink } from 'react-bootstrap'
+import { Tab, Tabs } from '@material-ui/core';
+import React from 'react';
 
 const Cities = ({ PLACES, activePlace, removeCity, updateActivePlace }) => {
-  return (
-    <Nav  variant="pills"
-          className="flex-column"
-          activeKey={activePlace}
-          onSelect={index => updateActivePlace(index)}>
-      {PLACES.map((place, index) => (
-        <NavItem key={index}>
-          <NavLink eventKey={index}
-            onDoubleClick={() => removeCity(place.name)}>{place.name}</NavLink>
-        </NavItem>)
-        )
-      }
-    </Nav>
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+    updateActivePlace(newValue);
+  };
+  return (<>
+    <Tabs   orientation="vertical"
+            variant="scrollable"
+            value={value}
+            onChange={handleChange}
+            aria-label="simple tabs example"
+            indicatorColor="primary"
+            textColor="primary"
+            style={{ height: 300}}
+            >
+            { PLACES.map((place, index) => ( <Tab key={index} label={place.name} 
+                                                  onDoubleClick={() => removeCity(place.name)}
+                                                  style={{outline: 'none'}}/>)) }  
+    </Tabs>
+    </>
   )  
 }
 
