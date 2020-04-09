@@ -1,8 +1,10 @@
 import React from 'react';
+import { Paper } from '@material-ui/core';
+import style from './WeatherDisplay.module.css'
 
 const WeatherDisplay = ({ weather, weatherData, iconUrl }) => {
   return (
-    <div>
+    <Paper elevation={3} className={style.weather}>
       <h1>
         {weather.main} in {weatherData.name}
         <img src={iconUrl} alt={weatherData.description} />
@@ -13,7 +15,7 @@ const WeatherDisplay = ({ weather, weatherData, iconUrl }) => {
       <p>Минимальная температура: {weatherData.main.temp_min}°</p>
       <p>Влажность: {weatherData.main.humidity} %</p>
       <p>Скорость ветра: {weatherData.wind.speed} м/сек</p>
-    </div>
+    </Paper>
   );
 }
 
