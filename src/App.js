@@ -1,95 +1,102 @@
-import { Container, Grid } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
-import React, { Component } from 'react';
+import { Container, Grid, useMediaQuery } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import React, { useState } from 'react';
 import './App.css';
 import Cities from './components/Cities';
 import Header from './components/Header';
 import Search from './components/Search';
-import WeatherDisplayContainer from './components/WeatherDisplayContainer';
+import WeatherDisplay from './components/WeatherDisplay';
 import './css/bootstrap.min.css';
 
+//TODO: @media material ui
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      PLACES: [
-        { name: "Санкт-Петербург" },
-        { name: "Улан-Удэ" },
-        { name: "Москва" }
-      ],
-      activePlace: 0,
-      value: "",
-    }
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.removeCity = this.removeCity.bind(this);
-    this.updateActivePlace = this.updateActivePlace.bind(this);
+function App() {
+  const [city, setCity] = useState({
+    PLACES: [
+      { name: "Санкт-Петербург" },
+      { name: "Улан-Удэ" },
+      { name: "Москва" }
+    ]
+  });
+  const [activePlace, setActivePlace] = useState(0);
+  const [value, setValue] = useState('');
+
+  const matches = useMediaQuery('(max-width:426px)');
+  
+  function removeCity(name) {
+    setCity({ PLACES: city.PLACES.filter(p => p.name !== name) });
+    setValue('')
+    setActivePlace(0)
   }
-  updateActivePlace(index) {
-    this.setState({ activePlace: index })
+  function handleChange(event) {
+    setValue(event.target.value)
   }
-  removeCity(name) {
-    const { PLACES } = this.state;
-    let newPlaces = PLACES.filter(p => p.name !== name)
-    this.setState({ PLACES: newPlaces, activePlace: 0 })
-  }
-  handleChange(event) {
-    this.setState({ value: event.target.value })
-  }
-  handleSubmit(event) {
-    const { value, PLACES } = this.state;
-    this.setState({
-      PLACES: [
-        ...PLACES,
-        { name: value }
-      ],
-      value: "",
-      activePlace: PLACES.length
-    })
+  function handleSubmit(event) {
+    setCity({ PLACES: [...city.PLACES, { name: value }] })
+    setValue('');
+    setActivePlace(city.PLACES.length)
     event.preventDefault();
   }
+  if (matches) {
+    return     <Container maxWidth='md' style={{ marginTop: 10}} >
+                  <Grid container>
+                    <Grid item xs={12} style={{ marginBottom: 10}}>
+                      <Header matches={matches}/>
+                    </Grid> 
+                    {!city.PLACES.length
+                      ? <Grid item xs={12}>
+                          <Alert>Нет города</Alert>
+                        </Grid>
+                      : <Grid item xs={12} >
+                          <WeatherDisplay key={activePlace} name={city.PLACES[activePlace].name} matches={matches}/>
+                        </Grid>
+                    }                    
+                    <Grid item xs={12} >
+                      <Search value={value} handleSubmit={handleSubmit}
+                        handleChange={handleChange} />
+                      <br />
+                      <Cities PLACES={city.PLACES} activePlace={activePlace}
+                              removeCity={removeCity}
+                              setActivePlace={setActivePlace}
+                              
+                      />
+                    </Grid>
+                    
+                    
 
-  render() {
-    const { activePlace, PLACES, value } = this.state;
-    if (!PLACES.length) return (
-      <Container maxWidth='md' style={{marginTop: 20}}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}><Header /></Grid>
-          <Grid item xs={5}>
-            <Search value={value} handleSubmit={this.handleSubmit} handleChange={this.handleChange} />
-          </Grid>
-          <Grid item xs={7}>
-            <Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
-              Выберите город
-            </Alert>
-          </Grid>  
-        </Grid>
-      </Container>)
-    return (
-      <Container maxWidth='md' style={{marginTop: 20}}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Header />
-          </Grid>
-          <Grid item xs={5}>
-            <Search value={value} handleSubmit={this.handleSubmit}
-              handleChange={this.handleChange} />
-              <br/>
-            <Cities PLACES={PLACES} activePlace={activePlace}
-                    removeCity={this.removeCity}
-                    updateActivePlace={this.updateActivePlace} 
-                    />
-          </Grid>
-          <Grid item xs={7}>
-              <WeatherDisplayContainer key={activePlace} name={PLACES[activePlace].name} />
-          </Grid>
-          
-        </Grid>
-      </Container>
-    );
+                  
+                  
+                  
+                  </Grid>
+                </Container>
   }
+  return (
+    <Container maxWidth='md' style={{ marginTop: 20 }}>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Header />
+        </Grid> 
+        <Grid item xs={4}>
+          <Search value={value} handleSubmit={handleSubmit}
+            handleChange={handleChange} />
+          <br />
+          <Cities PLACES={city.PLACES} activePlace={activePlace}
+                  removeCity={removeCity}
+                  setActivePlace={setActivePlace}
+          />
+        </Grid>
+        {!city.PLACES.length
+          ? <Grid item xs={7}>
+              <Alert>Нет города</Alert>
+            </Grid>
+          : <Grid item xs={8}>
+              <WeatherDisplay key={activePlace} name={city.PLACES[activePlace].name} />
+            </Grid>
+        }
+      </Grid>
+    </Container>
+  );
+
 }
 
 export default App;

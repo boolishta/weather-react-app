@@ -1,3 +1,11 @@
 .weather{
   padding: 20px 40px;
 }
+
+.weatherSmall{
+  padding: 20px 20px;
+  line-height: 12px;
+}
+.weatherSmall h1{
+  font-size: 20px;
+}

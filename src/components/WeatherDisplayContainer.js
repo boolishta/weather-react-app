@@ -13,14 +13,14 @@ class WeatherDisplayContainer extends Component {
       show: false
     }
   }
-  componentDidMount() {
-    const name = this.props.name;
-    const URL = "https://api.openweathermap.org/data/2.5/weather?q=" +
-      name + "&units=metric&appid=b1b35bba8b434a28a0be2a3e1071ae5b";
-    Axios.get(URL)
-      .then(res => this.setState({ weatherData: res.data }))
-      .catch(error => this.setState({ error }))
-  }
+  // componentDidMount() {
+  //   const name = this.props.name;
+  //   const URL = "https://api.openweathermap.org/data/2.5/weather?q=" +
+  //     name + "&units=metric&appid=3f69e94b2846c3e406b50a4100f3a461";
+  //   Axios.get(URL)
+  //     .then(res => this.setState({ weatherData: res.data }))
+  //     .catch(error => this.setState({ error }))
+  // }
   render() {
     const { weatherData, error } = this.state;
     if (!weatherData && error) {
@@ -30,12 +30,13 @@ class WeatherDisplayContainer extends Component {
           <p>{error.response.data.cod} {error.response.data.message}</p>
         </Alert>
       );
-    } else if (!weatherData) {
-      return <Spinner animation="grow" />
-    }
-    const weather = weatherData.weather[0];
-    const iconUrl = "https://openweathermap.org/img/w/" + weather.icon + ".png";
-    return <WeatherDisplay weather={weather} weatherData={weatherData} iconUrl={iconUrl}/>
+    } 
+    // else if (!weatherData) {
+    //   return <Spinner animation="grow" />
+    // }
+
+    return <WeatherDisplay  weatherData={weatherData} 
+                            name={this.props.name}/>
   }
 }
 

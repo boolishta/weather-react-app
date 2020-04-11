@@ -1,12 +1,11 @@
 import { Tab, Tabs } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 
-const Cities = ({ PLACES, activePlace, removeCity, updateActivePlace }) => {
-  const [value, setValue] = React.useState(0);
-
+const Cities = ({ PLACES, removeCity, setActivePlace }) => {
+  const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    updateActivePlace(newValue);
+    setActivePlace(newValue);
   };
   return (<>
     <Tabs   orientation="vertical"

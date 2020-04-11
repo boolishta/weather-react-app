@@ -1,9 +1,5 @@
-import React from 'react'
+import React from 'react';
 
-const Header = () => {
-  return (
-    <h1>React Simple Weather App</h1>
-  )  
+export default function Header ({matches}) { 
+  return <div  >React Simple Weather App</div>
 }
-
-export default Header
